@@ -1,11 +1,4 @@
 var platoJsClient = require('plato-js-client');
-var moment = require('moment');
-
-platoJsClient.client.getInstance().setInstance({
-  apiRoot: process.env.TABS2_API_ROOT || 'https://toccl.test.api.tabs-software.co.uk',
-  apiPrefix: '/v2',
-  token: process.env.TABS2_TOKEN
-});
 
 function getPropertyIdFromUrl(url) {
   var parts = url.split('/property/');
@@ -15,6 +8,10 @@ function getPropertyIdFromUrl(url) {
       parseInt(moreparts[0])
     );
   }
+}
+
+function getApiRootFromResponse(message) {
+  return ['https://', message.url.split('/')[2]].join('');
 }
 
 exports.handler = function (event, context, callback) {
@@ -30,6 +27,13 @@ exports.handler = function (event, context, callback) {
     var p = getPropertyIdFromUrl(message.url);
 
     if (p) {
+
+      platoJsClient.client.getInstance().setInstance({
+        apiRoot: getApiRootFromResponse(message),
+        apiPrefix: '/v2',
+        token: process.env.TABS2_TOKEN
+      });
+
       var req = {
         path: '/property/' + p.id + '/availablebreaks',
         method: 'put'

@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "moment": "^2.19.1",
     "plato-js-client": "github:CarltonSoftware/plato-js-client"
   }
 }
