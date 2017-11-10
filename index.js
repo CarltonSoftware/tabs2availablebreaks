@@ -11,7 +11,11 @@ function getPropertyIdFromUrl(url) {
 }
 
 function getApiRootFromResponse(message) {
-  return ['https://', message.url.split('/')[2]].join('');
+  var path = message.url.split('/').filter(function(ele) { return ele.indexOf('tabs-software') >= 0; });
+
+  if (path.length === 1) {
+    return ['https://', path.pop()].join('');
+  }
 }
 
 exports.handler = function (event, context, callback) {
@@ -27,9 +31,17 @@ exports.handler = function (event, context, callback) {
     var p = getPropertyIdFromUrl(message.url);
 
     if (p) {
+      console.log(p.id);
+
+      var r = getApiRootFromResponse(message);
+      console.log(r);
+
+      if (!r) {
+        return;
+      }
 
       platoJsClient.client.getInstance().setInstance({
-        apiRoot: getApiRootFromResponse(message),
+        apiRoot: r,
         apiPrefix: '/v2',
         token: process.env.TABS2_TOKEN
       });
@@ -38,10 +50,13 @@ exports.handler = function (event, context, callback) {
         path: '/property/' + p.id + '/availablebreaks',
         method: 'put'
       };
+      console.log(req);
 
       return platoJsClient.client.getInstance().put(req).then(function(response) {
         console.log(response);
-      }.bind(this));
+      }.bind(this), function(err) {
+        console.log(err);
+      });
     } else {
       return;
     }
