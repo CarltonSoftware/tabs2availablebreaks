@@ -24,6 +24,8 @@ exports.handler = function (event, context, callback) {
     'PropertyAvailability',
     'PriceFixed',
     'PriceOverride',
+    'PriceMinimum',
+    'PropertyBrandingYearPriceBand',
     'PartySizePrice'
   ];
 
