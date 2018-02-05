@@ -21,6 +21,7 @@ function getApiRootFromResponse(message) {
 exports.handler = function (event, context, callback) {
   var message = JSON.parse(event.Records[0].Sns.Message);
   var ValidEntities = [
+    'Property',
     'PropertyAvailability',
     'PriceFixed',
     'PriceOverride',
