@@ -1,7 +1,13 @@
 var platoJsClient = require('plato-js-client');
 
-function getPropertyIdFromUrl(url) {
-  var parts = url.split('/property/');
+function getPropertyIdFromMessage(message) {
+  if (message.entity === 'Property') {
+    return new platoJsClient.common.Property(
+      parseInt(message.id)
+    );
+  }
+
+  var parts = message.url.split('/property/');
   if (parts.length === 2) {
     var moreparts = parts.pop().split('/');
     return new platoJsClient.common.Property(
@@ -31,7 +37,7 @@ exports.handler = function (event, context, callback) {
   ];
 
   if (ValidEntities.indexOf(message.entity) >= 0) {
-    var p = getPropertyIdFromUrl(message.url);
+    var p = getPropertyIdFromMessage(message);
 
     if (p) {
       console.log(p.id);
