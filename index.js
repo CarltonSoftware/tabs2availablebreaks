@@ -29,6 +29,7 @@ exports.handler = function (event, context, callback) {
   var ValidEntities = [
     'Property',
     'PropertyAvailability',
+    'PropertyBranding',
     'PriceFixed',
     'PriceOverride',
     'PriceMinimum',
